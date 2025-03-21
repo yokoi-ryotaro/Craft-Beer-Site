@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+.footer{
+	color: #f0f8ff;
+	background-color: rgb(33, 33, 33);
+}
+
+.copyright{
+	text-align: center;
+	font-size: 0.8rem;
+}

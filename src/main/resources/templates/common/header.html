@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="header" th:fragment="header">
+	<div class="header-inner">
+		<div class="header-left">
+			<div class="logo">
+				<a th:href="@{/}">
+					<img th:src="@{/img/logo.png}" alt="logo">
+				</a>
+			</div>
+			<div class="site-name">
+				<a th:href="@{/}">
+					<p>CRAFT BEER SHOP</p>
+				</a>
+			</div>
+		</div>
+		<div class="header-right">
+			<nav class="header-links">
+				<ul>
+					<li>
+						<a th:href="@{/}">ホーム</a>
+					</li>
+					<li>
+						<a th:href="@{/items}">商品一覧</a>
+					</li>
+					<li>
+						<a th:href="@{/cart}">カート</a>
+					</li>
+					<li>
+						<a th:href="@{/mypage}">マイページ</a>
+					</li>
+					<li>
+						<a th:href="@{/login}">ログイン</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</header>
+</body>
+</html>

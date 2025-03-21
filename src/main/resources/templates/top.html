@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title}">トップページ</title>
+	<link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
+	<link rel="stylesheet" th:href="@{/css/header.css}">
+	<link rel="stylesheet" th:href="@{/css/footer.css}">
+</head>
+<body>
+	<div th:replace="~{common/header::header}"></div>
+	<h1>クラフトビールECサイト</h1>
+
+	<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>
