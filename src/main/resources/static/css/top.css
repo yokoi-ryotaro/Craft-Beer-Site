@@ -1,0 +1,34 @@
+@charset "UTF-8";
+
+#maincontent{
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.button{
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	color: #c7a816;
+	background-color: rgba(168, 169, 167, 0.2);
+	font-size: 0.8rem;
+	font-weight: bold;
+	border-radius: 8px;
+	padding: 10px 15px;
+}
+
+.title_h2{
+	margin-bottom: 10px;
+}
+
+.collection{
+	margin-bottom: 30px;
+}
+
+.collection-title{
+	margin-bottom: 15px;
+}
+
+.collection_description p{
+	font-size: 0.8rem;
+}

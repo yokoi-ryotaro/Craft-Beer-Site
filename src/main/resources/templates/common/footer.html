@@ -3,9 +3,51 @@
 <body>
 <footer class="footer" th:fragment="footer">
 	<div class="footer-inner">
-		<div class="copyright">
-			<p>&copy; 2025 クラフトビールECサイト</p>
+		<div class="footer-left">
+			<div class="question">
+				<a th:href="@{/}">よくあるご質問</a>
+			</div>
 		</div>
+		<div class="footer-right">
+			<nav class="footer-links">
+				<ul>
+					<li>
+						<a th:href="@{/}">会社情報</a>
+					</li>
+					<li>
+						<a th:href="@{/}">利用規約</a>
+					</li>
+					<li>
+						<a th:href="@{/}">プライバシーポリシー</a>
+					</li>
+					<li>
+						<a th:href="@{/}">お問い合せ</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+	<div class="sns">
+		<ul>
+			<li>
+				<a th:href="@{/}">
+					<img th:src="@{/img/sns/X.png}" alt="x">
+				</a>
+			</li>
+			<li>
+				<a th:href="@{/}">
+					<img th:src="@{/img/sns/Instagram.png}" alt="instagram">
+				</a>
+			</li>
+			<li>
+				<a th:href="@{/}">
+					<img th:src="@{/img/sns/Facebook.png}" alt="Facebook">
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="copyright">
+		<p>&copy; 2025 クラフトビールECサイト</p>
 	</div>
 </footer>
 </body>
