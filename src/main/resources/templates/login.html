@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title th:text="${title}">ログインページ</title>
+		<th:block th:replace="~{common/sourceList::sourceList}" />
+		<link rel="stylesheet" th:href="@{/css/login.css}">
+	</head>
+<body>
+	<div th:replace="~{common/header::header}"></div>
+	<main id="maincontent">
+		<h1>ログイン</h1>
+		<section id="mainsection">
+			<form th:action="@{/login}" method="post">
+				<div th:if="${param.error}" class="error-message">
+				  メールアドレスまたはパスワードが正しくありません。
+				</div>
+				<div th:if="${successMessage}" class="success-message">
+					<p th:text="${successMessage}"></p>
+				</div>
+				<div th:if="${param.logout}" class="success-message">
+					<p>ログアウトしました。</p>
+				</div>
+				<div class="form-row">
+					<label for="email">メールアドレス</label>
+					<div class="form">
+						<input type="email" id="email" name="username" required />
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="password">パスワード</label>
+					<div class="form">
+						<input type="password" id="password" name="password" required />
+					</div>
+				</div>
+			  	<button type="submit" class="login-button">ログイン</button>
+			</form>
+			<a class="signup" th:href="@{/signup}">アカウントを作成する</a>
+		</section>
+	</main>
+	<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

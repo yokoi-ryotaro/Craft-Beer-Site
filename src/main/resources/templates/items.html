@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title}">商品一覧ページ</title>
+	<th:block th:replace="~{common/sourceList::sourceList}" />
+	<link rel="stylesheet" th:href="@{/css/items.css}">
+</head>
+<body>
+	<div th:replace="~{common/header::header}"></div>
+	<main id="maincontent">
+		<h1>商品一覧</h1>
+		<section id="mainsection">
+			<div class="section-left">
+				<form id="searchForm" method="GET" th:action="@{/items/search}">
+					<input type="text" name="keyword" placeholder="商品名を検索" th:value="${keyword}">
+					<div class="filter-group">
+						<h3>価格帯</h3>
+						<select name="price">
+							<option value="">指定なし</option>
+							<option value="0-999" th:selected="${selectedPriceRange == '0-999'}">〜999円</option>
+							<option value="1000-2999" th:selected="${selectedPriceRange == '1000-2999'}">1,000〜2,999円</option>
+							<option value="3000-" th:selected="${selectedPriceRange == '3000-'}">3,000円〜</option>
+						</select>
+					</div>
+					<div class="filter-group">
+						<h3>原産国</h3>
+						<select name="country">
+							<option value="">指定なし</option>
+						 	<option th:each="country:${countries}" 
+								th:value="${country.id}" 
+								th:text="${country.name}" 
+								th:selected="${country.id} == ${selectedCountryId}">
+							</option>
+						</select>
+					</div>
+					<div class="filter-group">
+						<h3>アルコール分</h3>
+						<select name="abv">
+							<option value="">指定なし</option>
+							<option value="0-5.0" th:selected="${selectedAbvRange == '0-5.0'}">〜5.0%</option>
+							<option value="5.1-7.5" th:selected="${selectedAbvRange == '5.1-7.5'}">5.1〜7.5%</option>
+							<option value="7.6-10.0" th:selected="${selectedAbvRange == '7.6-10.0'}">7.6〜10.0%</option>
+							<option value="10.1-" th:selected="${selectedAbvRange == '10.1-'}">10.1%〜</option>
+						</select>
+					</div>
+					<div class="filter-group">
+						<h3>容量</h3>
+						<select name="volume">
+							<option value="">指定なし</option>
+							<option value="0-350" th:selected="${selectedVolumeRange == '0-350'}">〜350ml</option>
+							<option value="351-500" th:selected="${selectedVolumeRange == '351-500'}">351〜500ml</option>
+							<option value="501-750" th:selected="${selectedVolumeRange == '501-750'}">501〜750ml</option>
+							<option value="751-" th:selected="${selectedVolumeRange == '751-'}">751ml〜</option>
+						</select>
+					</div>
+					<div class="filter-group">
+						<h3>在庫状況</h3>
+						<label><input type="checkbox" name="inStock" value="true" th:checked="${inStock == true}"> 在庫あり</label>
+					</div>
+					<button type="button" id="clearButton">すべてクリア</button>
+					<button type="submit">検索</button>
+				</form>
+			</div>
+			<div class="section-right">
+				<div class="sort-container">
+					<form method="GET" th:action="@{/items/search}">
+						<label for="sort">並び替え：</label>
+						<select id="sort" name="sort" onchange="this.form.submit()">
+							<option value="" th:selected="${sort == null or sort == ''}">新着順</option>
+							<option value="price_desc" th:selected="${sort == 'price_desc'}">価格が高い順</option>
+							<option value="price_asc" th:selected="${sort == 'price_asc'}">価格が安い順</option>
+							<option value="salesCount_desc" th:selected="${sort == 'salesCount_desc'}">人気順</option>
+						</select>
+						<input type="hidden" name="keyword" th:value="${keyword}">
+						<input type="hidden" name="price" th:value="${selectedPriceRange}">
+						<input type="hidden" name="country" th:value="${selectedCountryId}">
+						<input type="hidden" name="abv" th:value="${selectedAbvRange}">
+						<input type="hidden" name="volume" th:value="${selectedVolumeRange}">
+						<input type="hidden" name="inStock" th:value="${inStock}">
+					</form>
+				</div>
+				<div th:if="${#lists.isEmpty(items)}" class="no-results-message">
+					<p>商品が見つかりませんでした。</p>
+				</div>
+				<div class="grid-container">
+					<a th:each="item:${items}" 
+						th:href="@{/item/{nameEnglish}(nameEnglish=${item.nameEnglish})}" 
+						class="item-card">
+						<img th:src="@{/img/item/{image}(image=${item.image})}" th:alt="${item.name}">
+						<div class="item-details">
+							<h3 th:text="${item.name}"></h3>
+							<p th:text="'¥' +  ${#numbers.formatInteger(item.priceWithTax, 0, 'COMMA')}"></p>
+							<p th:text="${item.isSoldOut} ? '× 売り切れ' : '○ 在庫あり'"></p>
+						</div>
+					</a>
+				</div>
+				<div class="pagination" th:if="${!#lists.isEmpty(items)}">
+					<a th:if="${currentPage > 0}" 
+						th:href="@{/items/search(
+							page=${currentPage - 1}, 
+							pageSize=${pageSize}, 
+							keyword=${keyword},
+							price=${selectedPriceRange}, 
+							country=${selectedCountryId},
+							abv=${selectedAbvRange},
+							volume=${selectedVolumeRange},
+							inStock=${inStock},
+							sort=${sort})}" 
+						class="prev">
+						＜
+					</a>
+					<span th:each="pageNum:${#numbers.sequence(0, totalPages - 1)}">
+						<a th:href="@{/items/search(
+							page=${pageNum}, 
+							pageSize=${pageSize}, 
+							keyword=${keyword},
+							price=${selectedPriceRange}, 
+							country=${selectedCountryId},
+							abv=${selectedAbvRange},
+							volume=${selectedVolumeRange},
+							inStock=${inStock},
+							sort=${sort})}" 
+							th:text="${pageNum + 1}"
+							th:class="${pageNum == currentPage} ? 'active' : ''">
+						</a>
+					</span>
+					<a th:if="${currentPage < totalPages - 1}" 
+						th:href="@{/items/search(
+							page=${currentPage + 1}, 
+							pageSize=${pageSize}, 
+							keyword=${keyword},
+							price=${selectedPriceRange}, 
+							country=${selectedCountryId},
+							abv=${selectedAbvRange},
+							volume=${selectedVolumeRange},
+							inStock=${inStock},
+							sort=${sort})}" 
+						class="next">
+						＞
+					</a>
+				</div>
+			</div>
+		</section>	
+	</main>
+	<div th:replace="~{common/footer::footer}"></div>
+	<script th:src="@{/js/clearForm.js}"></script>
+</body>
+</html>

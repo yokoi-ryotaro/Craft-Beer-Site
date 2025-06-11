@@ -3,15 +3,16 @@
 <head>
 	<meta charset="UTF-8">
 	<title th:text="${title}">トップページ</title>
-	<link rel="icon" th:href="@{/img/logo.ico}">
-	<link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
-	<link rel="stylesheet" th:href="@{/css/header.css}">
-	<link rel="stylesheet" th:href="@{/css/footer.css}">
+	<th:block th:replace="~{common/sourceList::sourceList}" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 	<link rel="stylesheet" th:href="@{/css/top.css}">
 </head>
 <body>
 	<div th:replace="~{common/header::header}"></div>
 	<main id="maincontent">
+		<div id="mainvisual">
+			<img th:src="@{/img/mainvisual.jpg}" alt="mainvisual">
+		</div>
 		<div class="collection">
 			<div class="collection-title">
 				<h2 class="title_h2">
@@ -21,11 +22,23 @@
 					<p>新着商品</p>
 				</div>
 			</div>
-			<slider>
-				
-			</slider>
+			<div class="swiper-area">
+				<div class="swiper">
+					<div class="swiper-wrapper">
+						<a th:each="item:${newItems}" th:href="@{/item/{nameEnglish}(nameEnglish=${item.nameEnglish})}"  class="swiper-slide">
+							<div class="slide">
+								<div class="slide-media">
+									<img th:src="@{/img/item/{image}(image=${item.image})}" th:alt="${item.name}">
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="swiper-button-prev"></div>
+					<div class="swiper-button-next"></div>
+				</div>
+			</div>
 			<div class="collection_all">
-				<a th:href="@{/}" class="button">すべてを見る</a>
+				<a th:href="@{/items/search(sort='')}" class="button">すべてを見る</a>
 			</div>
 		</div>
 		<div class="collection">
@@ -37,14 +50,28 @@
 					<p>人気商品</p>
 				</div>
 			</div>
-			<slider>
-			
-			</slider>
+			<div class="swiper-area">
+				<div class="swiper">
+					<div class="swiper-wrapper">
+						<a th:each="item:${bestSellers}" th:href="@{/item/{nameEnglish}(nameEnglish=${item.nameEnglish})}" class="swiper-slide">
+							<div class="slide">
+								<div class="slide-media">
+									<img th:src="@{/img/item/{image}(image=${item.image})}" th:alt="${item.name}">
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="swiper-button-prev"></div>
+					<div class="swiper-button-next"></div>
+				</div>
+			</div>
 			<div class="collection_all">
-				<a th:href="@{/}" class="button">すべてを見る</a>
+				<a th:href="@{/items/search(sort='salesCount_desc')}" class="button">すべてを見る</a>
 			</div>
 		</div>
 	</main>
 	<div th:replace="~{common/footer::footer}"></div>
+	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+	<script src="/js/top.js" defer></script>
 </body>
 </html>

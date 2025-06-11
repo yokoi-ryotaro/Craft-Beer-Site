@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title th:text="${title}">マイページ</title>
+		<th:block th:replace="~{common/sourceList::sourceList}" />
+		<link rel="stylesheet" th:href="@{/css/mypage.css}">
+	</head>
+<body>
+	<div th:replace="~{common/header::header}"></div>
+	<main id="maincontent">
+		<h1>マイページ</h1>
+		<section id="mainsection">
+			<p>ようこそ、<span th:text="${fullName}">ゲスト</span>さん！</p>
+			<form th:action="@{/logout}" method="post">
+				<button type="submit" class="logout-button">ログアウト</button>
+			</form>
+		</section>
+	<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

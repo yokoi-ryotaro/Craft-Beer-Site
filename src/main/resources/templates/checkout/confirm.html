@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title}">ご購入手続き</title>
+	<div th:replace="~{common/sourceList::sourceList}"></div>
+	<link rel="stylesheet" th:href="@{/css/confirm.css}">
+</head>
+<body>
+	<div th:replace="~{common/header::header}"></div>
+	<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

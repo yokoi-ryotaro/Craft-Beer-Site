@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title}">ショッピングカート</title>
+	<th:block th:replace="~{common/sourceList::sourceList}" />
+	<link rel="stylesheet" th:href="@{/css/cart.css}">
+</head>
+<body>
+	<div th:replace="~{common/header::header}"></div>
+	<main id="maincontent">
+		<h1>ショッピングカート</h1>
+		<section id="mainsection">
+			<div th:if="${#lists.isEmpty(cartItems)}" class="cart-empty">
+				<div class="cart-empty-message">
+					<p>カート内に商品はありません。</p>
+				</div>
+				<div class="shopping">
+					<a th:href="@{/items/search(sort='')}" class="button">買い物を続ける</a>
+				</div>
+			</div>
+			<table th:if="${!#lists.isEmpty(cartItems)}">
+				<colgroup>
+					 <col style="width: 20%;"> 
+					 <col style="width: 30%;">
+					 <col style="width: 10%;">
+					 <col style="width: 10%;">
+					 <col style="width: 20%;">
+				 </colgroup>
+				 <tr>
+					<th>商品</th>
+					<th></th>
+					<th>数量</th>
+					<th></th>
+					<th>合計</th>
+				 </tr>
+				 <tr th:each="item : ${cartItems}">
+					<td>
+						<a th:href="@{/item/{nameEnglish}(nameEnglish=${item.nameEnglish})}" class="item-image">
+							<img th:src="@{/img/item/{img}(img=${item.imagePath})}" width="100">
+						</a>
+					</td>
+					<td>
+						<a th:href="@{/item/{nameEnglish}(nameEnglish=${item.nameEnglish})}" th:text="${item.name}" class="item-name"></a>
+					</td>
+					<td>
+						<form th:action="@{/cart/update}" method="post">
+							<input type="hidden" name="itemId" th:value="${item.itemId}" />
+							<div class="quantity-button">
+								<button type="button" class="decreaseQuantity" onclick="decreaseQuantity(this)">ー</button>
+								<input type="number" class="quantity" name="quantity" min="1" th:value="${item.quantity}" onchange="this.form.submit()"/>
+								<button type="button" class="increaseQuantity" onclick="increaseQuantity(this)">＋</button>
+							</div>
+						</form>
+					</td>
+					<td>
+						<form th:action="@{/cart/delete}" method="post" style="display:inline;" class="delete">
+							<input type="hidden" name="itemId" th:value="${item.itemId}" />
+							<button type="submit">削除</button>
+						</form>
+					</td>
+					<td>
+						<span class="subtotal" th:text="'¥' + ${#numbers.formatInteger(item.priceWithTax * item.quantity, 0, 'COMMA')}"></span>
+					</td>
+				 </tr>
+			</table>
+			<div class="about-shipping">
+				<div>
+					<h4>★配送料について★</h4>
+					<p>
+						ご注文金額に応じて送料（基本送料）が発生します。
+						<br>
+						<br>・ご注文金額 1,999円まで
+						<br>　●基本送料：1,000円（税込）
+						<br>・ご注文金額 2,000円～4,999円まで　
+						<br>　●基本送料：500円（税込）
+						<br>・ご注文金額5,000円～
+						<br>　●基本送料：無料
+					</p>
+				</div>
+			</div>
+			<div th:if="${!#lists.isEmpty(cartItems)}" class="total-price">
+				<div class="cart-total">
+					カート内合計：<span th:text="'¥' + ${#numbers.formatInteger(totalPrice, 0, 'COMMA')}"></span>
+				</div>
+				<div class="shipping-fee">
+					送料：<span th:text="'¥' + ${#numbers.formatInteger(shippingFee, 0, 'COMMA')}"></span>
+				</div>
+				<div class="payment-total">
+					お支払合計：<span th:text="'¥' + ${#numbers.formatInteger(totalPrice + shippingFee, 0, 'COMMA')}"></span>
+				</div>
+			</div>
+			<div th:if="${!#lists.isEmpty(cartItems)}" class="proceed-to-checkout">
+				<form th:action="@{/checkout/confirm}" method="post">
+					<button type="submit" class="checkout">ご購入手続きへ</button>
+				</form>
+			</div>
+		</section>
+	</main>
+	<div th:replace="~{common/footer::footer}"></div>
+	<script th:src="@{/js/cart.js}"></script>
+</body>
+</html>
