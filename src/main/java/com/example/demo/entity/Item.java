@@ -63,27 +63,27 @@ public class Item {
 	private String nameEnglish;
 	
 	/** 税抜価格（単位：円） */
-	private int price;
+	private Integer price;
 	
 	/** 商品説明 */
 	@Column(name = "item_details")
 	private String itemDetails;
 	
 	/** 在庫数 */
-	private int stock;
+	private Integer stock;
 	
 	/** 商品画像のファイル名 */
 	private String image;
 	
 	/** 容量（単位：ミリリットル） */
-	private int volume;
+	private Integer volume;
 	
 	/** アルコール度数（単位：%） */
 	private Double abv;
 	
 	/** 売上数（販売実績のカウント） */
 	@Column(name = "sales_count")
-	private int salesCount;
+	private Integer salesCount;
 	
 	/** 売り切れフラグ（true：売り切れ、false：在庫あり） */
 	@Column(name = "is_sold_out")
@@ -104,5 +104,5 @@ public class Item {
 	 * </p>
 	 */
 	@Transient
-	private int priceWithTax;
+	private Integer priceWithTax;
 }

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title}">ご注文完了</title>
+	<th:block th:replace="~{common/sourceList::sourceList}" />
+	<link rel="stylesheet" th:href="@{/css/complete.css}">
+</head>
+<body>
+	<div th:replace="~{common/header::header}"></div>
+		<main id="maincontent">
+			<h1>ご注文完了</h1>
+			<section id="mainsection">
+			</section>
+		</main>
+	<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

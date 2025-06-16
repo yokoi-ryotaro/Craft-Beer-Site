@@ -91,7 +91,7 @@
 				</div>
 			</div>
 			<div th:if="${!#lists.isEmpty(cartItems)}" class="proceed-to-checkout">
-				<form th:action="@{/checkout/confirm}" method="post">
+				<form th:action="@{/checkout}" method="post">
 					<button type="submit" class="checkout">ご購入手続きへ</button>
 				</form>
 			</div>

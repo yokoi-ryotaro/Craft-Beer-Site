@@ -1,0 +1,84 @@
+@charset "UTF-8";
+
+table {
+	width: 100%;
+	align-items: center;
+}
+
+td {
+	border-bottom: 1px solid #ddd;
+	text-align: center;
+}
+
+.total-price {
+	margin-top: 30px;
+	padding: 0 80px;
+	text-align: right;
+}
+
+.payment-total {
+	font-weight: bold;
+	font-size: 1.2rem;
+	margin-top: 10px;
+}
+
+.h2-title {
+	margin-top: 50px;
+}
+
+input {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	transition: border-color 0.3s ease;
+}
+
+input:focus {
+	border-color: #3498db;
+	outline: none;
+}
+
+.form-row {
+	display: flex;
+	align-items: center;
+	margin-top: 15px;
+	justify-content: center;
+}
+
+.form-row label {
+	width: 200px;
+	text-align: left;
+	align-items: center;
+}
+
+.payment {
+	width: auto;
+	margin-top: 15px;
+}
+
+.buttom-button {
+	margin-top: 50px;
+	display: flex;
+	justify-content: space-around;
+}
+
+.back-cart {
+	padding: 12px;
+	text-decoration: underline;
+}
+
+.confirm-button {
+	width: 180px;
+	padding: 12px;
+	background-color: #28a745;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.confirm-button:hover {
+	background-color:#218838;
+}

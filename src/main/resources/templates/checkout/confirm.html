@@ -2,12 +2,107 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title th:text="${title}">ご購入手続き</title>
-	<div th:replace="~{common/sourceList::sourceList}"></div>
+	<title th:text="${title}">ご注文内容確認</title>
+	<th:block th:replace="~{common/sourceList::sourceList}" />
 	<link rel="stylesheet" th:href="@{/css/confirm.css}">
 </head>
 <body>
 	<div th:replace="~{common/header::header}"></div>
+	<main id="maincontent">
+		<h1>ご注文内容確認</h1>
+		<section id="mainsection">
+			<div class="items">
+				<table>
+					<colgroup>
+						 <col style="width: 30%;"> 
+						 <col style="width: 40%;">
+						 <col style="width: 10%;">
+						 <col style="width: 20%;">
+					 </colgroup>
+					<tr th:each="item : ${cartItems}">
+						<td>
+							<img th:src="@{/img/item/{img}(img=${item.imagePath})}" width="80">
+						</td>
+						<td th:text="${item.name}"></td>
+						<td th:text="${item.quantity} + '個'"></td>
+						<td th:text="'¥' + ${#numbers.formatInteger(item.priceWithTax * item.quantity, 0, 'COMMA')}"></td>
+					</tr>
+				</table>
+				<div class="total-price">
+					<p>商品合計：<span th:text="'¥' + ${#numbers.formatInteger(totalPrice, 0, 'COMMA')}"></span></p>
+					<p>送料：<span th:text="'¥' + ${#numbers.formatInteger(shippingFee, 0, 'COMMA')}"></span></p>
+					<div class="payment-total">
+						<p>お支払合計：<span th:text="'¥' + ${#numbers.formatInteger(totalPrice + shippingFee, 0, 'COMMA')}"></span></p>	
+					</div>
+				</div>
+			</div>
+			<h2 class="h2-title">ご注文者情報</h2>
+			<div class="row">
+				<div class="label">姓：</div>
+				<div class="value" th:text="${checkoutForm.lastName}"></div>
+			</div>
+			<div class="row">
+				<div class="label">名：</div>
+				<div class="value" th:text="${checkoutForm.firstName}"></div>
+			</div>
+			<div class="row">
+				<div class="label">メールアドレス：</div>
+				<div class="value" th:text="${checkoutForm.email}"></div>
+			</div>
+			<h2 class="h2-title">配送先情報</h2>
+			<div class="row">
+				<div class="label">郵便番号：</div>
+				<div class="value" th:text="${checkoutForm.postCode}"></div>
+			</div>
+			<div class="row">
+				<div class="label">都道府県：</div>
+				<div class="value" th:text="${checkoutForm.prefecture}"></div>
+			</div>
+			<div class="row">
+				<div class="label">市区町村：</div>
+				<div class="value" th:text="${checkoutForm.city}"></div>
+			</div>
+			<div class="row">
+				<div class="label">番地：</div>
+				<div class="value" th:text="${checkoutForm.street}"></div>
+			</div>
+			<div class="row">
+				<div class="label">建物名：</div>
+				<div class="value" th:text="${checkoutForm.building}"></div>
+			</div>
+			<div class="row">
+				<div class="label">電話番号：</div>
+				<div class="value" th:text="${checkoutForm.phoneNumber}"></div>
+			</div>
+			<h2 class="h2-title">決済方法</h2>
+			<div class="row">
+				<div class="label">決済方法：</div>
+				<div class="value">
+					<span th:switch="${checkoutForm.paymentMethod}">
+						<span th:case="'CREDIT'">クレジットカード</span>
+						<span th:case="'BANK'">銀行振込</span>
+						<span th:case="'COD'">代金引換</span>
+					</span>
+				</div>
+			</div>
+			<form th:action="@{/checkout/complete}" method="post">
+				<input type="hidden" name="lastName" th:value="${checkoutForm.lastName}" />
+				<input type="hidden" name="firstName" th:value="${checkoutForm.firstName}" />
+				<input type="hidden" name="email" th:value="${checkoutForm.email}" />
+				<input type="hidden" name="postCode" th:value="${checkoutForm.postCode}" />
+				<input type="hidden" name="prefecture" th:value="${checkoutForm.prefecture}" />
+				<input type="hidden" name="city" th:value="${checkoutForm.city}" />
+				<input type="hidden" name="street" th:value="${checkoutForm.street}" />
+				<input type="hidden" name="building" th:value="${checkoutForm.building}" />
+				<input type="hidden" name="phoneNumber" th:value="${checkoutForm.phoneNumber}" />
+				<input type="hidden" name="paymentMethod" th:value="${checkoutForm.paymentMethod}" />
+				<div class="buttom-button">
+					<a th:href="@{/checkout}" class="back-checkout">戻る</a>
+					<button type="submit" class="complete-button">注文を確定する</button>
+				</div>
+			</form>
+		</section>
+	</main>
 	<div th:replace="~{common/footer::footer}"></div>
 </body>
 </html>

@@ -8,8 +8,8 @@ import jakarta.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.SessionCartItem;
 import com.example.demo.entity.Item;
-import com.example.demo.model.CartItem;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,11 +20,11 @@ public class CartService {
 	private static final String SESSION_CART_KEY = "cart";
 
 	/**
-   * セッションからカート取得（なければ新規作成）
-   */
+	 * セッションからカート取得（なければ新規作成）
+	 */
 	@SuppressWarnings("unchecked")
-	public List<CartItem> getCart(HttpSession session) {
-		List<CartItem> cart = (List<CartItem>) session.getAttribute(SESSION_CART_KEY);
+	public List<SessionCartItem> getCart(HttpSession session) {
+		List<SessionCartItem> cart = (List<SessionCartItem>) session.getAttribute(SESSION_CART_KEY);
 		if (cart == null) {
 			cart = new ArrayList<>();
 			session.setAttribute(SESSION_CART_KEY, cart);
@@ -33,17 +33,17 @@ public class CartService {
 	}
 	
 	/**
-   * 商品をカートに追加
-   */
+	 * 商品をカートに追加
+	 */
 	public void addToCart(HttpSession session, Item item, int quantity) {
-		List<CartItem> cart = getCart(session);
-		for (CartItem cartItem : cart) {
+		List<SessionCartItem> cart = getCart(session);
+		for (SessionCartItem cartItem : cart) {
 			if (cartItem.getItemId().equals(item.getId())) {
 				cartItem.setQuantity(cartItem.getQuantity() + quantity);
 				return;
 			}
 		}
-		CartItem newItem = new CartItem();
+		SessionCartItem newItem = new SessionCartItem();
 		newItem.setItem(item);
 		newItem.setItemId(item.getId());
 		newItem.setName(item.getName());
@@ -56,8 +56,8 @@ public class CartService {
 	/**
 	 * カート内の合計金額を計算
 	 */
-	public int calculateTotalPrice(List<CartItem> cart) {
-		return cart.stream()
+	public int calculateTotalPrice(List<SessionCartItem> cartItems) {
+		return cartItems.stream()
 				.mapToInt(item -> item.getPriceWithTax() * item.getQuantity())
 				.sum();
 	}
@@ -75,8 +75,8 @@ public class CartService {
 	* カート内商品の数量更新
 	*/
 	public void updateQuantity(HttpSession session, Long itemId, int quantity) {
-		List<CartItem> cart = getCart(session);
-		for (CartItem cartItem : cart) {
+		List<SessionCartItem> cart = getCart(session);
+		for (SessionCartItem cartItem : cart) {
 			if (cartItem.getItemId().equals(itemId)) {
 				cartItem.setQuantity(quantity);
 				break;
@@ -88,8 +88,8 @@ public class CartService {
 	 * 商品をカートから削除
 	 */
 	public void removeFromCart(HttpSession session, Long itemId) {
-		List<CartItem> cart = getCart(session);
-		Iterator<CartItem> iterator = cart.iterator();
+		List<SessionCartItem> cart = getCart(session);
+		Iterator<SessionCartItem> iterator = cart.iterator();
 		while (iterator.hasNext()) {
 			if (iterator.next().getItemId().equals(itemId)) {
 				iterator.remove();
@@ -102,6 +102,6 @@ public class CartService {
 	 * カートを空にする（購入後など）
 	 */
 	public void clearCart(HttpSession session) {
-		session.setAttribute(SESSION_CART_KEY, new ArrayList<CartItem>());
+		session.removeAttribute(SESSION_CART_KEY);
 	}
 }

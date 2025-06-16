@@ -1,0 +1,73 @@
+@charset "UTF-8";
+
+table {
+	width: 100%;
+	align-items: center;
+}
+
+td {
+	border-bottom: 1px solid #ddd;
+	text-align: center;
+}
+
+.total-price {
+	margin-top: 30px;
+	padding: 0 80px;
+	text-align: right;
+}
+
+.payment-total {
+	font-weight: bold;
+	font-size: 1.2rem;
+	margin-top: 10px;
+}
+
+.h2-title {
+	margin-top: 50px;
+}
+
+.row {
+	display: flex;
+	align-items: center;
+	margin-top: 10px;
+	justify-content: center;
+}
+
+.label {
+	width: 500px; 
+	text-align: right;
+	padding-right: 10px;
+	flex-grow: 1;
+}
+
+.value {
+	width: 500px;
+	text-align: left;
+	flex-grow: 1;
+}
+
+.buttom-button {
+	margin-top: 50px;
+	display: flex;
+	justify-content: space-around;
+}
+
+.back-checkout {
+	padding: 12px;
+	text-decoration: underline;
+}
+
+.complete-button {
+	width: 180px;
+	padding: 12px;
+	background-color:  #3498db;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.complete-button:hover {
+	background-color:#2980b9;
+}

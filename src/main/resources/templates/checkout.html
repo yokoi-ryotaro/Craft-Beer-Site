@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title}">ご購入手続き</title>
+	<th:block th:replace="~{common/sourceList::sourceList}" />
+	<link rel="stylesheet" th:href="@{/css/checkout.css}">
+</head>
+<body>
+	<div th:replace="~{common/header::header}"></div>
+	<main id="maincontent">
+		<h1>ご購入手続き</h1>
+		<section id="mainsection">
+			<div class="items">
+				<table>
+					<colgroup>
+						 <col style="width: 30%;"> 
+						 <col style="width: 40%;">
+						 <col style="width: 10%;">
+						 <col style="width: 20%;">
+					 </colgroup>
+					<tr th:each="item : ${cartItems}">
+						<td>
+							<img th:src="@{/img/item/{img}(img=${item.imagePath})}" width="80">
+						</td>
+						<td th:text="${item.name}"></td>
+						<td th:text="${item.quantity} + '個'"></td>
+						<td th:text="'¥' + ${#numbers.formatInteger(item.priceWithTax * item.quantity, 0, 'COMMA')}"></td>
+					</tr>
+				</table>
+				<div class="total-price">
+					<p>商品合計：<span th:text="'¥' + ${#numbers.formatInteger(totalPrice, 0, 'COMMA')}"></span></p>
+					<p>送料：<span th:text="'¥' + ${#numbers.formatInteger(shippingFee, 0, 'COMMA')}"></span></p>
+					<div class="payment-total">
+						<p>お支払合計：<span th:text="'¥' + ${#numbers.formatInteger(totalPrice + shippingFee, 0, 'COMMA')}"></span></p>	
+					</div>
+				</div>
+			</div>
+			<form th:action="@{/checkout/confirm}" th:object="${checkoutForm}" method="post" >
+				<h2 class="h2-title">ご注文者情報</h2>
+				<div class="form-row">
+					<label for="lastName">姓</label>
+					<div class="form">
+						<input type="text" th:value="${user.lastName}" name="lastName" id="lastName" />
+						<div class="error-message" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="firstName">名</label>
+					<div class="form">
+						<input type="text" th:value="${user.firstName}" name="firstName" id="firstName" />
+						<div class="error-message" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="email">メールアドレス</label>
+					<div class="form">
+						<input type="email" th:value="${user.email}" name="email" id="email" />
+						<div class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+					</div>
+				</div>
+				<h2 class="h2-title">配送先情報</h2>
+				<div class="form-row">
+					<label for="postCode">郵便番号</label>
+					<div class="form">
+						<input type="text" th:value="${user.postCode}" name="postCode" id="postCode" onkeyup="AjaxZip3.zip2addr(this, '', 'prefecture', 'city');" />
+						<div class="error-message" th:if="${#fields.hasErrors('postCode')}" th:errors="*{postCode}"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="prefecture">都道府県</label>
+					<div class="form">
+						<input type="text" th:value="${user.prefecture}" name="prefecture" id="prefecture" />
+						<div class="error-message" th:if="${#fields.hasErrors('prefecture')}" th:errors="*{prefecture}"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="city">市区町村</label>
+					<div class="form">
+						<input type="text" th:value="${user.city}" name="city" id="city" />
+						<div class="error-message" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="street">番地</label>
+					<div class="form">
+						<input type="text" th:value="${user.street}" name="street" id="street" />
+						<div class="error-message" th:if="${#fields.hasErrors('street')}" th:errors="*{street}"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="building">建物名</label>
+					<div class="form">
+						<input type="text" th:value="${user.building}" name="building" id="building" />
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="phoneNumber">電話番号</label>
+					<div class="form">
+						<input type="text" th:value="${user.phoneNumber}" name="phoneNumber" id="phoneNumber" />
+						<div class="error-message" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+					</div>
+				</div>
+				<h2 class="h2-title">決済方法</h2>
+				<label><input type="radio" class="payment" name="paymentMethod" value="CREDIT" required> クレジットカード</label><br>
+				<label><input type="radio" class="payment" name="paymentMethod" value="BANK"> 銀行振込</label><br>
+				<label><input type="radio" class="payment" name="paymentMethod" value="COD"> 代金引換</label><br>
+				<div class="buttom-button">
+					<a th:href="@{/cart}" class="back-cart">カートへ戻る</a>
+					<button type="submit" class="confirm-button">確認画面へ</button>
+				</div>
+			</form>
+		</section>
+	</main>
+	<div th:replace="~{common/footer::footer}"></div>
+	<script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
+</body>
+</html>

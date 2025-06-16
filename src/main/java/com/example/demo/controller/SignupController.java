@@ -22,7 +22,7 @@ public class SignupController {
 	private final SignupService signupService;
 
 	@GetMapping("/signup")
-	public String showSingupForm(Model model, SignupForm form) {
+	public String showSingupForm(Model model, SignupForm signform) {
 		model.addAttribute("title", "ユーザー登録");
 		return "signup";
 	}
@@ -30,8 +30,7 @@ public class SignupController {
 	@PostMapping("/signup")
 	public String processSignup(Model model, @Valid @ModelAttribute SignupForm signupForm, BindingResult bdResult, RedirectAttributes redirectAttributes) {
 		if (bdResult.hasErrors()) {
-			model.addAttribute("title", "ユーザー登録");
-			return "signup";
+			return showSingupForm(model, signupForm);
 		}
 		signupService.signup(signupForm);
 		redirectAttributes.addFlashAttribute("successMessage", "ユーザー登録が完了しました。ログインしてください。");
