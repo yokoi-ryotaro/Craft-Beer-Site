@@ -21,7 +21,7 @@
 					 </colgroup>
 					<tr th:each="item : ${cartItems}">
 						<td>
-							<img th:src="@{/img/item/{img}(img=${item.imagePath})}" width="80">
+							<img th:src="@{/img/item/{img}(img=${item.image})}" width="80">
 						</td>
 						<td th:text="${item.name}"></td>
 						<td th:text="${item.quantity} + '個'"></td>

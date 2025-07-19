@@ -37,7 +37,7 @@
 				 <tr th:each="item : ${cartItems}">
 					<td>
 						<a th:href="@{/item/{nameEnglish}(nameEnglish=${item.nameEnglish})}" class="item-image">
-							<img th:src="@{/img/item/{img}(img=${item.imagePath})}" width="100">
+							<img th:src="@{/img/item/{img}(img=${item.image})}" width="100">
 						</a>
 					</td>
 					<td>

@@ -5,9 +5,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 /**
- * 商品検索に関連するユーティリティクラス。
+ * 商品検索機能に関連するヘルパーメソッドを提供するユーティリティクラス。
+ *
+ * <p>主に以下の機能を提供する：
+ * <ul>
+ *   <li>数値・小数の範囲指定文字列のパース処理</li>
+ *   <li>ソート条件に基づいた Pageable オブジェクトの生成</li>
+ * </ul>
+ *
+ * <p>検索画面や商品一覧APIなど、ページング・フィルタリング・並び替えを行う場面で再利用可能。</p>
  */
 public class SearchUtils {
+	
+	private SearchUtils() {
+		// インスタンス化禁止
+	}
 	
 	/**
 	 * 整数の範囲を配列に変換する

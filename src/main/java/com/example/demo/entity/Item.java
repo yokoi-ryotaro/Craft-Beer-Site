@@ -1,7 +1,5 @@
 package com.example.demo.entity;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +12,7 @@ import jakarta.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -25,12 +24,13 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Table(name = "items")
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Item {
+public class Item extends BaseEntity {
 
-	/** 商品ID（プライマリキー） */
+	/** 商品ID（主キー） */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -88,14 +88,6 @@ public class Item {
 	/** 売り切れフラグ（true：売り切れ、false：在庫あり） */
 	@Column(name = "is_sold_out")
 	private boolean isSoldOut;
-	
-	/** 商品の作成日時（フォーマット：yyyy-MM-dd HH:mm:ss）  */
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-	
-	/** 商品情報の最終更新日時（フォーマット：yyyy-MM-dd HH:mm:ss）  */
-	@Column(name = "updated_at")
-	private LocalDateTime updatedAt;
 	
 	/**
 	 * 税込価格

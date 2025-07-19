@@ -10,7 +10,7 @@ import com.example.demo.repository.CountryRepository;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 国情報の取得を行うサービスクラス
+ * 国情報の取得を行うサービスクラス。
  * <p>
  * 国情報の取得処理を提供する。
  * </p>
@@ -23,7 +23,7 @@ public class CountryService {
 	private final CountryRepository countryRepository;
 	
 	/**
-	 * 国名の一覧を取得する
+	 * 国名の一覧を取得する。
 	 * @return 国名リスト
 	 */
 	public List<Country> getAllCountries() {

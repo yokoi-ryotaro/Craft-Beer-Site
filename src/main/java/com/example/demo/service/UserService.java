@@ -8,6 +8,15 @@ import com.example.demo.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * ユーザー情報を取得するためのサービスクラス。
+ *
+ * <p>主にメールアドレス（＝ユーザー名）をキーとして、ユーザーIDやUserエンティティを取得する責務を担う。</p>
+ *
+ * <p>Spring Securityの認証処理やアプリケーション内のユーザー情報参照ロジックで使用される。</p>
+ *
+ * <p>取得失敗時には UsernameNotFoundException をスローして処理側に通知する。</p>
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -15,7 +24,13 @@ public class UserService {
 	private final UserRepository userRepository;
 	
 	/**
-	 * ユーザー名からユーザーIDを取得する
+	 * メールアドレスから該当ユーザーのIDを取得する。
+	 *
+	 * <p>認証済みユーザーの識別や内部照合に使用される。</p>
+	 *
+	 * @param email 検索対象のメールアドレス
+	 * @return ユーザーID（Long型）
+	 * @throws UsernameNotFoundException ユーザーが存在しない場合
 	 */
 	public Long getUserIdByEmail(String email) {
 		return userRepository.findByEmail(email)
@@ -24,7 +39,13 @@ public class UserService {
 	}
 	
 	/**
-	 * ユーザー名からUserエンティティを取得したい場合はこちら
+	 * メールアドレスから該当するUserエンティティを取得する。
+	 *
+	 * <p>ユーザー詳細の表示や処理ロジックへの連携などに使用される。</p>
+	 *
+	 * @param email 検索対象のメールアドレス
+	 * @return Userエンティティ
+	 * @throws UsernameNotFoundException ユーザーが存在しない場合
 	 */
 	public User getUserByEmail(String email) {
 		return userRepository.findByEmail(email)

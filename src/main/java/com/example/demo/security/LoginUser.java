@@ -11,6 +11,14 @@ import com.example.demo.entity.User;
 
 import lombok.Getter;
 
+/**
+ * アプリケーション独自のUserDetails実装クラス。
+ *
+ * <p>Spring Securityの認証処理に使用され、データベースから取得されたUserエンティティをもとに、
+ * ロール・資格情報・アカウント状態などのセキュリティ情報を提供する。</p>
+ *
+ * <p>LoginUserはSecurityContextに保持され、ログイン済みユーザー情報として利用される。</p>
+ */
 @Getter
 public class LoginUser implements UserDetails{
 	
@@ -20,19 +28,36 @@ public class LoginUser implements UserDetails{
 		this.user = user;
 	}
 	
+	/**
+	 * ユーザーのロールに基づいてGrantedAuthorityを返す。
+	 *
+	 * <p>ロールは "ROLE_" プレフィックス付きで大文字に変換される。</p>
+	 *
+	 * @return ユーザーに付与された権限の一覧
+	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase()));
 	}
 	
-	@Override
-	public String getPassword() {
-		return user.getPassword();
-	}
-	
+	/**
+	 * 認証に使用されるユーザー名（メールアドレス）を返す。
+	 *
+	 * @return ユーザーのメールアドレス
+	 */
 	@Override
 	public String getUsername() {
 		return user.getEmail();
+	}
+	
+	/**
+	 * 認証に使用されるパスワード（ハッシュ済み）を返す。
+	 *
+	 * @return パスワード（ハッシュ文字列）
+	 */
+	@Override
+	public String getPassword() {
+		return user.getPassword();
 	}
 	
 	@Override
@@ -50,6 +75,13 @@ public class LoginUser implements UserDetails{
 		return true; // 必要に応じて切り替え
 	}
 	
+	/**
+	 * ユーザーが有効かどうかを返す。
+	 *
+	 * <p>退会済みの場合は無効（false）として扱う。</p>
+	 *
+	 * @return アカウントが有効ならtrue、無効ならfalse
+	 */
 	@Override
 	public boolean isEnabled() {
 		return !user.getIsDeleted(); // 退会済みかどうかで制御

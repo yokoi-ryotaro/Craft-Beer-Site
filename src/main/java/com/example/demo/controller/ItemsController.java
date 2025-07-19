@@ -18,7 +18,7 @@ import com.example.demo.util.SearchUtils;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 商品一覧ページのコントローラークラス
+ * 商品一覧ページのコントローラークラス。
  */
 @Controller
 @RequiredArgsConstructor
@@ -34,7 +34,7 @@ public class ItemsController {
 	  * 商品を検索して一覧ページを表示する
 	  * <p>
 	  * キーワード、価格帯、原産国、アルコール分、容量、在庫状況、並び順などの条件を基に商品情報を検索し、
-	  * 検索結果をページングして表示します。また、検索フォームの選択肢として国情報も取得します。
+	  * 検索結果をページングして表示する。また、検索フォームの選択肢として国情報も取得する。
 	  * </p>
 	  * @param page ページ番号（0始まり）
 	  * @param pageSize 1ページあたりの表示件数

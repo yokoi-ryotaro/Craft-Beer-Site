@@ -12,10 +12,82 @@
 		<h1>マイページ</h1>
 		<section id="mainsection">
 			<p>ようこそ、<span th:text="${fullName}">ゲスト</span>さん！</p>
+			<h2>ご注文履歴</h2>
+			<div th:if="${#lists.isEmpty(orders)}">注文履歴がありません。</div>
+			<div th:if="${!#lists.isEmpty(orders)}">
+				<div th:each="order : ${orders}" class="orders">
+					<div class="order-header">
+						<div class="header-inner">
+							<div class="header-left">
+								<div class="header-item">
+									<li class="header-list">
+										<div class="header-row size-mini">
+											<span>注文日</span>
+										</div>
+										<div class="haeder-row">
+											<span th:text="${#temporals.format(order.createdAt, 'yyyy/MM/dd')}"></span>
+										</div>
+									</li>
+								</div>
+								<div class="header-item">
+									<li class="header-list">
+										<div class="header-row size-mini">
+											<span>合計</span>
+										</div>
+										<div class="haeder-row">
+											<span th:text="'¥' + ${#numbers.formatInteger(order.totalPrice, 0, 'COMMA')}"></span>円
+										</div>
+									</li>
+								</div>
+							</div>
+							<div class="header-right">
+								<div class="header-item">
+									<li class="header-list">
+										<div class="header-row size-mini">
+											<span>注文番号 ◯◯◯</span>
+										</div>
+										<div class="haeder-row">
+											<span><a th:href="@{/mypage}" class="order-details">注文内容を表示</a></span>
+										</div>
+									</li>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="order-footer">
+						<div class="footer-inner">
+							<div class="order-item">
+								<div class="item-inner">
+									<li th:each="orderItem : ${order.orderItems}">
+										<div class="img">
+											<img th:src="@{/img/item/{img}(img=${orderItem.item.image})}" width="80">
+										</div>
+										<div class="name">
+											<a th:href="@{/item/{nameEnglish}(nameEnglish=${orderItem.item.nameEnglish})}" th:text="${orderItem.item.name}" class="item-name"></a>
+										</div>
+										<div class="quantity">
+											<p th:text="${orderItem.quantity} + '個'"></p>
+										</div>
+									</li>
+								</div>
+							</div>
+							<div class="order-button">
+								<div class="a-button">
+									<a th:href="@{/mypage}" class="size-mini">配送状況を確認</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> 
+			</div>
+			<div class="pass">
+				<a class="change-pass" th:href="@{/change-password}">▲▼パスワードの変更はこちら▼▲</a>
+			</div>
 			<form th:action="@{/logout}" method="post">
 				<button type="submit" class="logout-button">ログアウト</button>
 			</form>
 		</section>
+	</main>
 	<div th:replace="~{common/footer::footer}"></div>
 </body>
 </html>

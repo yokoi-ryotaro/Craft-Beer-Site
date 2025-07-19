@@ -4,18 +4,134 @@
 	font-size: 1.2rem;
 }
 
+h2 {
+	margin: 30px 0 15px 0;
+}
+
+.orders {
+	margin-bottom: 10px;
+}
+
+.orders:last-child {
+	margin-bottom: 30px;
+}
+
+.order-header {
+	background-color: #f0f2f2;
+	border-color: #d5d9d9;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 8px 8px 0 0;
+}
+
+.order-header .header-inner {
+	padding: 10px 20px;
+}
+
+.header-left .header-item {
+	margin-right: 150px;
+}
+
+.header-left .header-item:last-child {
+	margin-right: 0;
+}
+
+.header-row {
+	text-align: left;
+}
+
+.header-list {
+	margin-right: 30px;
+}
+
+.header-list .order-details {
+	color: rgb(33, 98, 161);
+}
+
+.header-list .order-details:hover {
+	border-bottom: 2px solid
+}
+
+.size-mini {
+	font-size: 1rem;
+}
+
+.order-footer {
+	border-color: #d5d9d9;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 0 0 8px 8px ;
+}
+
+.order-footer .footer-inner {
+	display: flex;
+	padding: 15px 30px;
+}
+
+.order-item {
+	width: 60%;
+}
+
+.item-inner li {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.item-inner li:last-child {
+	margin-bottom: 0;
+}
+
+.item-inner .img {
+	width: auto;
+}
+
+.item-inner .name {
+	width: 70%;
+	padding: 0 20px 0 20px;
+}
+
+.item-inner .quantity {
+	width: auto;
+}
+
+.item-inner .item-name:hover {
+	border-bottom: 2px solid
+}
+
+.order-button {
+	width: 20%;
+}
+
+.order-button .a-button {
+	display: inline-block;
+	background-color: #ffce12;
+	border-radius: 30px;
+	padding: 5px 0;
+	width: 100%;
+	cursor: pointer;
+}
+
+.order-button .a-button:hover {
+	background-color: #f8bd19;
+}
+
+.change-pass:hover {
+	border-bottom: 2px solid
+}
+
 .logout-button {
-  background-color: #e74c3c; 
-  color: white;
-  margin-top: 20px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+	background-color: #e74c3c; 
+	color: white;
+	margin-top: 20px;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 6px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
 }
 
 .logout-button:hover {
-  background-color: #c0392b; 
+	background-color: #c0392b; 
 }

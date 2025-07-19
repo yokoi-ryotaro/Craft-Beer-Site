@@ -13,7 +13,7 @@ import com.example.demo.service.ItemService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 商品詳細ページのコントローラークラス
+ * 商品詳細ページのコントローラークラス。
  */
 @Controller
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class ItemDetailController {
 	private final ItemService itemService;
 	
 	/**
-	 * 商品詳細ページを表示するための処理を行う
+	 * 商品詳細ページを表示するための処理を行う。
 	 * <p>
 	 * 指定された英語商品名に基づいて商品情報を取得し、取得できた商品情報をビューに渡して、商品詳細ページを表示する。
 	 * 英語商品名に対応する商品が見つからない場合は、404エラーページにリダイレクトされる。

@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+.complete-message {
+	font-size: 1.2rem;
+}
+
+.button{
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	color: #333;
+	background-color: rgb(249, 217, 76);
+	font-size: 1.1rem;
+	font-weight: bold;
+	padding: 10px 15px;
+	transition: opacity 0.1s ease-in-out;
+}
+
+.mypage-button {
+	margin-top: 20px;
+}
+
+.button:hover{
+	opacity: 0.6;
+}

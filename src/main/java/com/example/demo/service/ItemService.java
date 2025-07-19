@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Item;
 import com.example.demo.repository.ItemRepository;
+import com.example.demo.util.PricingUtils;
 
 import lombok.RequiredArgsConstructor;
 
 /**
- * 商品情報の取得を行うサービスクラス
+ * 商品情報の取得を行うサービスクラス。
  * <p>
  * 新着商品や人気商品の取得処理を提供する。
  * </p>
@@ -25,11 +26,8 @@ public class ItemService {
 	/** 商品テーブルのリポジトリ */
 	private final ItemRepository itemRepository;
 	
-	/** 税率10% */
-	private double taxRate = 1.10;
-	
 	/**
-	 * 新着商品を取得する
+	 * 新着商品を取得する。
 	 * <p>
 	 * 作成日時が新しい順に最大10件のデータを取得する。
 	 * </p>
@@ -40,7 +38,7 @@ public class ItemService {
 	}
 	
 	/**
-	 * 人気商品を取得する
+	 * 人気商品を取得する。
 	 * <p>
 	 * 売上数が多い順に最大10件のデータを取得する。
 	 * </p>
@@ -51,7 +49,7 @@ public class ItemService {
 	}
 	
 	/**
-	 * 商品名（英語）から商品情報を取得する
+	 * 商品名（英語）から商品情報を取得する。
 	 * @param nameEnglish 商品名（英語）
 	 * @return 該当する商品情報
 	 */
@@ -60,16 +58,16 @@ public class ItemService {
 	}
 	
 	/**
-	 * 税込価格を計算する
+	 * 税込価格を計算する。
 	 * @param price 商品の税抜価格
 	 * @return 税込価格
 	 */
 	public int calculatePriceWithTax(int price) {
-		return (int) Math.floor(price * taxRate);
+		return PricingUtils.calculatePriceWithTax(price);
 	}
 	
 	/**
-	 * 商品IDから商品情報を取得する
+	 * 商品IDから商品情報を取得する。
 	 * @param id 商品ID
 	 * @return 該当する商品情報（存在しない場合は空）
 	 */
@@ -78,7 +76,7 @@ public class ItemService {
 	}
 	
 	/**
-	 * 検索条件に基づいて商品情報をページ単位で取得する
+	 * 検索条件に基づいて商品情報をページ単位で取得する。
 	 * <p>
 	 * キーワード、価格帯、原産国、アルコール分、容量、在庫状況を指定して商品情報を検索し、
 	 * ページングされた結果を返却する。取得した各商品には税込価格を設定する。
@@ -99,7 +97,7 @@ public class ItemService {
 			Double minAbv, Double maxAbv, Integer minVolume, Integer maxVolume, Boolean inStock, Pageable pageable) {
 		Page<Item> items = itemRepository.searchItemsByConditions(keyword, minPrice, maxPrice, countryId, 
 				minAbv, maxAbv, minVolume, maxVolume, inStock, pageable);
-		items.forEach(item -> item.setPriceWithTax((int) Math.floor(item.getPrice() * taxRate)));
+		items.forEach(item -> item.setPriceWithTax(PricingUtils.calculatePriceWithTax(item.getPrice())));
 		return items;
 	}
 }

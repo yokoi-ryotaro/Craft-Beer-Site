@@ -11,6 +11,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 国情報を保持するエンティティ。
+ *
+ * <p>「countries」テーブルにマッピングされ、国名・ISOコード・有効フラグを管理する。</p>
+ *
+ * <p>商品表示で国を選択させる機能に利用される。</p>
+ *
+ * <p>「有効フラグ」を用いることで、取り扱い停止中の国を画面側から除外することも可能。</p>
+ */
 @Entity
 @Table(name = "countries")
 @Data
@@ -18,7 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Country {
 
-	/** 国ID（プライマリキー） */
+	/** 国ID（主キー） */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

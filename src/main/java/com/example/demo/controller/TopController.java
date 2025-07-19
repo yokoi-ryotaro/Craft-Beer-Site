@@ -12,10 +12,9 @@ import com.example.demo.service.ItemService;
 import lombok.RequiredArgsConstructor;
 
 /**
- * トップページのコントローラークラス
- * <p>
- * クラフトビールECサイトのトップページの初期表示に関する処理を担当する。
- * </p>
+ * トップページのコントローラークラス。
+ * 
+ * <p>クラフトビールECサイトのトップページの初期表示に関する処理を担当する。</p>
  */
 @Controller
 @RequiredArgsConstructor
@@ -25,7 +24,8 @@ public class TopController {
 	private final ItemService itemService;
 	
 	/**
-	 * トップページの初期表示を行う
+	 * トップページの初期表示を行う。
+	 * 
 	 * @param model モデルオブジェクト（画面に表示するデータを保持）
 	 * @return トップページのビュー名
 	 */

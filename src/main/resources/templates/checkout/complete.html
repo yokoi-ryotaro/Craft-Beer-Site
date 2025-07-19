@@ -11,6 +11,13 @@
 		<main id="maincontent">
 			<h1>ご注文完了</h1>
 			<section id="mainsection">
+				<div class="complete-message">
+					<p>ご注文ありがとうございます。</p>
+					<p>商品の到着まで今しばらくお待ちください。</p>
+				</div>
+				<div class="mypage-button">
+					<a th:href="@{/mypage}" class="button">マイページへ</a>
+				</div>
 			</section>
 		</main>
 	<div th:replace="~{common/footer::footer}"></div>
