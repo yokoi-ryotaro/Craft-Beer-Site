@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -15,11 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.demo.dto.CheckoutForm;
 import com.example.demo.dto.SessionCartItem;
 import com.example.demo.entity.CartItem;
-import com.example.demo.entity.Item;
-import com.example.demo.entity.Order;
-import com.example.demo.entity.OrderItem;
-import com.example.demo.repository.ItemRepository;
+import com.example.demo.entity.CheckoutTemp;
 import com.example.demo.service.CartService;
+import com.example.demo.service.CheckoutTempService;
 import com.example.demo.service.DbCartService;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.UserService;
@@ -47,8 +44,8 @@ public class CheckoutController {
 	private final DbCartService dbCartService;
 	private final OrderService orderService;
 	private final UserService userService;
-	private final ItemRepository itemRepository;
-	
+	private final CheckoutTempService checkoutTempService;
+
 	/**
 	 * 購入画面を表示する。
 	 *
@@ -63,8 +60,8 @@ public class CheckoutController {
 	 * @return 購入画面のテンプレート名
 	 */
 	@GetMapping
-	public String showCheckout(Model model, HttpSession session, CheckoutForm form,  Principal principal) {
-		int totalPrice, shippingFee;
+	public String showCheckout(Model model, HttpSession session, CheckoutForm form, Principal principal) {
+		int totalPrice, shippingFee, paymentTotal;
 		
 		if (principal != null) {
 			Long userId = userService.getUserIdByEmail(principal.getName());
@@ -78,10 +75,12 @@ public class CheckoutController {
 			model.addAttribute("cartItems", sessionCartItems);
 		}
 		shippingFee = CartUtils.calculateShippingFee(totalPrice);
+		paymentTotal = totalPrice + shippingFee;
 		
 		model.addAttribute("title", "ご購入手続き");
 		model.addAttribute("totalPrice", totalPrice);
 		model.addAttribute("shippingFee", shippingFee);
+		model.addAttribute("paymentTotal", paymentTotal);
 		model.addAttribute("checkoutForm", form);
 		
 		return "checkout";
@@ -119,77 +118,57 @@ public class CheckoutController {
 		return showCheckout(model, session, form, principal).replace("checkout", "checkout/confirm");
 	}
 	
-	/**
-	 * 注文内容を確定し、注文情報・注文明細を保存する。
-	 *
-	 * <p>ログインユーザーの場合はUserID・CartIDを取得してDBカートを処理し、
-	 * 非ログインユーザーはセッションベースのカート情報を使用して注文登録を行う。</p>
-	 *
-	 * <p>注文登録後はカートをクリアし、注文完了画面へ遷移する。</p>
-	 *
-	 * @param model モデル
-	 * @param session セッション情報
-	 * @param form フォーム情報
-	 * @param principal ログインユーザー情報
-	 * @return 注文完了画面テンプレート名
-	 */
-	@PostMapping("/complete")
-	public String completeOrder(Model model, HttpSession session, CheckoutForm form, Principal principal) {
-		List<OrderItem> orderItems;
-		int totalPrice, shippingFee, paymentTotal;
-		
-		Order order = new Order();
-		order.setLastName(form.getLastName());
-		order.setFirstName(form.getFirstName());
-		order.setEmail(form.getEmail());
-		order.setPostCode(form.getPostCode());
-		order.setPrefecture(form.getPrefecture());
-		order.setCity(form.getCity());
-		order.setStreet(form.getStreet());
-		order.setBuilding(form.getBuilding());
-		order.setPhoneNumber(form.getPhoneNumber());
-		order.setPaymentMethod(form.getPaymentMethod());
-		
-		if (principal != null) {
-			Long userId = userService.getUserIdByEmail(principal.getName());
-			Long cartId = dbCartService.getCartIdByUserId(userId);
-			order.setUserId(userId);
-			List<CartItem> dbItems = dbCartService.getCartItems(userId);
-			for (CartItem cartItem : dbItems) {
-				Item item = itemRepository.findById(cartItem.getItemId()).orElseThrow();
-				cartItem.setPriceWithTax((int) Math.floor(item.getPrice() * 1.1));
-			}
-			totalPrice = dbCartService.calculateTotalPrice(dbItems);
-			shippingFee = CartUtils.calculateShippingFee(totalPrice);
-			paymentTotal = totalPrice + shippingFee;
-			order.setTotalPrice(totalPrice);
-			order.setShippingFee(shippingFee);
-			order.setPaymentTotal(paymentTotal);
-			
-			orderItems = dbItems.stream()
-				.map(ci -> new OrderItem(null, null, ci.getItemId(), ci.getQuantity(), ci.getPriceWithTax(), null))
-				.collect(Collectors.toList());
-			
-			orderService.saveOrderWithItems(order, orderItems);
-			dbCartService.clearCart(cartId);
-		} else {
-			List<SessionCartItem> sessionItems = cartService.getCart(session);
-			totalPrice = cartService.calculateTotalPrice(sessionItems);
-			shippingFee = CartUtils.calculateShippingFee(totalPrice);
-			paymentTotal = totalPrice + shippingFee;
-			order.setTotalPrice(totalPrice);
-			order.setShippingFee(shippingFee);
-			order.setPaymentTotal(paymentTotal);
-			
-			orderItems = sessionItems.stream()
-				.map(ci -> new OrderItem(null, null, ci.getItemId(), ci.getQuantity(), ci.getPriceWithTax(), null))
-				.collect(Collectors.toList());
-			
-			orderService.saveOrderWithItems(order, orderItems);
-			cartService.clearCart(session);
+	 /**
+   * 決済成功後に呼び出される注文完了画面を表示する。
+   *
+   * <p>Stripe の successUrl に設定されており、決済が正常に完了した場合に遷移する。</p>
+   * <p>一時保存していた購入情報とカート内容を基に注文をDBに登録し、カートや一時データをクリアする。</p>
+   *
+   * <p>直接アクセスやセッション切れの場合はエラーページへ遷移する。</p>
+   *
+   * @param principal ログインユーザー情報
+   * @param model ビューへ渡すモデル
+   * @return 注文完了画面のテンプレート名、またはエラーページ
+   */
+	@GetMapping("/complete")
+	public String completeCheckout(Principal principal, Model model) {
+		if (principal == null) {
+			return "redirect:/login";
 		}
+		
+		Long userId = userService.getUserIdByEmail(principal.getName());
+		Long cartId = dbCartService.getCartIdByUserId(userId);
+		CheckoutTemp temp = checkoutTempService.getByUserId(userId);
+		
+		if (temp == null) {
+			return "error";
+		}
+		
+		List<CartItem> cartItems = dbCartService.getCartItems(userId);
+		
+		orderService.createOrder(userId, temp, cartItems);
+		
+		dbCartService.clearCart(cartId);
+		checkoutTempService.deleteByUserId(userId);
 		
 		model.addAttribute("title", "注文完了");
 		return "checkout/complete";
+	}
+	
+	 /**
+   * 決済キャンセル時に呼び出される購入画面を再表示する。
+   *
+   * <p>Stripe の cancelUrl に設定されており、ユーザーが決済をキャンセルした場合に遷移する。</p>
+   * <p>再度入力や確認が行えるよう、通常の購入画面表示処理を再利用して構成される。</p>
+   *
+   * @param model ビューへ渡すモデル
+   * @param session セッション情報
+   * @param form フォーム情報
+   * @param principal ログインユーザー情報
+   * @return 購入画面テンプレート名
+   */
+	@GetMapping("/cancel")
+	public String cancelCheckout(Model model, HttpSession session, CheckoutForm form, Principal principal) {
+		return showCheckout(model, session, form, principal);
 	}
 }

@@ -32,7 +32,7 @@
 					<p>商品合計：<span th:text="'¥' + ${#numbers.formatInteger(totalPrice, 0, 'COMMA')}"></span></p>
 					<p>送料：<span th:text="'¥' + ${#numbers.formatInteger(shippingFee, 0, 'COMMA')}"></span></p>
 					<div class="payment-total">
-						<p>お支払合計：<span th:text="'¥' + ${#numbers.formatInteger(totalPrice + shippingFee, 0, 'COMMA')}"></span></p>	
+						<p>お支払合計：<span th:text="'¥' + ${#numbers.formatInteger(paymentTotal, 0, 'COMMA')}"></span></p>	
 					</div>
 				</div>
 			</div>
@@ -80,12 +80,15 @@
 				<div class="value">
 					<span th:switch="${checkoutForm.paymentMethod}">
 						<span th:case="'CREDIT'">クレジットカード</span>
+						<!--
 						<span th:case="'BANK'">銀行振込</span>
 						<span th:case="'COD'">代金引換</span>
+						-->
 					</span>
 				</div>
 			</div>
-			<form th:action="@{/checkout/complete}" method="post">
+			
+			<form th:action="@{/checkout/create-session}" method="post">
 				<input type="hidden" name="lastName" th:value="${checkoutForm.lastName}" />
 				<input type="hidden" name="firstName" th:value="${checkoutForm.firstName}" />
 				<input type="hidden" name="email" th:value="${checkoutForm.email}" />
@@ -98,7 +101,7 @@
 				<input type="hidden" name="paymentMethod" th:value="${checkoutForm.paymentMethod}" />
 				<div class="buttom-button">
 					<a th:href="@{/checkout}" class="back-checkout">戻る</a>
-					<button type="submit" class="complete-button">注文を確定する</button>
+					<button type="submit" id="checkout-button" class="complete-button">決済する</button>
 				</div>
 			</form>
 		</section>

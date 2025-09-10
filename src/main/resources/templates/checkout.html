@@ -32,7 +32,7 @@
 					<p>商品合計：<span th:text="'¥' + ${#numbers.formatInteger(totalPrice, 0, 'COMMA')}"></span></p>
 					<p>送料：<span th:text="'¥' + ${#numbers.formatInteger(shippingFee, 0, 'COMMA')}"></span></p>
 					<div class="payment-total">
-						<p>お支払合計：<span th:text="'¥' + ${#numbers.formatInteger(totalPrice + shippingFee, 0, 'COMMA')}"></span></p>	
+						<p>お支払合計：<span th:text="'¥' + ${#numbers.formatInteger(paymentTotal, 0, 'COMMA')}"></span></p>	
 					</div>
 				</div>
 			</div>
@@ -103,8 +103,10 @@
 				</div>
 				<h2 class="h2-title">決済方法</h2>
 				<label><input type="radio" class="payment" name="paymentMethod" value="CREDIT" required> クレジットカード</label><br>
+				<!--
 				<label><input type="radio" class="payment" name="paymentMethod" value="BANK"> 銀行振込</label><br>
 				<label><input type="radio" class="payment" name="paymentMethod" value="COD"> 代金引換</label><br>
+				-->
 				<div class="buttom-button">
 					<a th:href="@{/cart}" class="back-cart">カートへ戻る</a>
 					<button type="submit" class="confirm-button">確認画面へ</button>
