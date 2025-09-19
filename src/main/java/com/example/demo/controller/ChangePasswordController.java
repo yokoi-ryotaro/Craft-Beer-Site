@@ -72,6 +72,7 @@ public class ChangePasswordController {
 	 * @param bdResult バリデーション結果
 	 * @return 処理結果後のテンプレート名
 	 */
+	@SuppressWarnings("null")
 	@PostMapping("/change-password")
 	public String changePassword(Model model, @AuthenticationPrincipal LoginUser loginUser, @Valid @ModelAttribute ChangePasswordForm form, BindingResult bdResult) {
 		model.addAttribute("title", "パスワード変更");
